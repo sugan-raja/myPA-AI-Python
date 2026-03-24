@@ -7,9 +7,8 @@ from handlers.listener import takeCommand
 def handle(query):
     if "search on google" in query or "open website" in query:
         speak("What should i search or open?")
-        chromepath = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
         search = takeCommand().lower()
-        wb.get(chromepath).open_new_tab(search + '.com')
+        wb.open_new_tab(search + '.com')
     else:
         speak("searching...")
         for word in ["wikipedia", "search", "what", "when", "where", "who", "is"]:
