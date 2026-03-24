@@ -14,4 +14,4 @@ def handle(query):
         songs_dir = "C:\\Music"
         songs = os.listdir(songs_dir)
         os.startfile(os.path.join(songs_dir, songs[1]))
-        quit()
+        return "EXIT"
