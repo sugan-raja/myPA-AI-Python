@@ -21,7 +21,11 @@ def dispatch(query):
         personal.handle(query)
     elif any(w in query for w in ["developer", "father", "who develop you"]):
         personal.handle(query)
-    elif any(w in query for w in ['wikipedia', 'what', 'who', 'when', 'where', 'search on google', 'open website']):
+    elif any(w in query for w in ["cpu and battery", "battery", "cpu"]):
+        system_info.handle(query)
+    elif any(w in query for w in ["weather", "temperature"]):
+        weather.handle(query)
+    elif any(w in query for w in ['wikipedia', 'search on google', 'open website']):
         search.handle(query)
     elif "send email" in query:
         email_handler.handle(query)
@@ -31,12 +35,8 @@ def dispatch(query):
         reminder.handle(query)
     elif "screenshot" in query:
         screenshot.handle(query)
-    elif any(w in query for w in ["cpu and battery", "battery", "cpu"]):
-        system_info.handle(query)
     elif any(w in query for w in ["tell me a joke", "joke"]):
         jokes.handle(query)
-    elif any(w in query for w in ["weather", "temperature"]):
-        weather.handle(query)
     elif any(w in query for w in ["tell me your powers", "help", "features"]):
         features.handle(query)
     elif any(w in query for w in ["hii", "hello", "goodmorning", "goodafternoon", "goodnight", "morning", "noon", "night"]):
