@@ -8,7 +8,7 @@ def handle(query):
     elif "restart" in query:
         os.system("shutdown /r /t 1")
     elif "shut down" in query:
-        os.system("shutdown /r /t 1")
+        os.system("shutdown /s /t 1")
     elif "play songs" in query:
         speak("Playing...")
         songs_dir = "C:\\Music"
