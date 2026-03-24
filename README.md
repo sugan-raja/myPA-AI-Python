@@ -2,125 +2,129 @@
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=plastic&logo=python&logoColor=ffdd54)
 
-![image](https://user-images.githubusercontent.com/11313549/83199718-64016700-a15f-11ea-8d7e-9b04280841f9.png)
+A Python 3 voice-controlled virtual assistant.
 
-# Description
+## Project Structure
 
-This is the Jarvis AI Project made in Python3. It is a virtual assistant and has a variety of features it can carry out.
+```
+myPA-AI-Python/
+├── main.py                  # Entry point — dispatcher loop
+├── handlers/
+│   ├── voice.py             # TTS engine, speak(), voice_change()
+│   ├── listener.py          # Microphone input, wishme(), wishme_end()
+│   ├── datetime_handler.py  # Time and date
+│   ├── personal.py          # About Jarvis / developer info
+│   ├── search.py            # Wikipedia + Google/website search
+│   ├── email_handler.py     # Send email via Gmail SMTP
+│   ├── system.py            # Shutdown / restart / logout / music
+│   ├── reminder.py          # Create and read reminders
+│   ├── screenshot.py        # Take screenshots
+│   ├── system_info.py       # CPU and battery usage
+│   ├── jokes.py             # Random jokes
+│   ├── weather.py           # Weather via OpenWeatherMap API
+│   ├── features.py          # List all capabilities
+│   └── greeting.py          # Greetings and time-aware responses
+├── requirements.txt
+└── about.txt                # Developer info (read by personal handler)
+```
 
-Say "Help" or "Tell me your features" and Jarvis will say all of its capabilities.
+## Installation
 
-
-# Installation
-
-1. Clone the Repository
+1. Clone the repository
 
         git clone https://github.com/praveenkumarsrivas/Jarvis-AI-using-python3-.git
 
-2. Open the Project Directory
+2. Open the project directory
 
         cd Jarvis-AI-using-python3-
 
-3. Install the Required Python Modules
+3. Install dependencies
 
         pip install -r requirements.txt
 
-4. Run the Script
+4. Configure the following before running:
 
-        python jarvis.py
+   - **Email** — set your Gmail credentials in `handlers/email_handler.py`
+   - **Weather** — set your OpenWeatherMap API key in `handlers/weather.py`
+   - **Screenshots** — update the save path in `handlers/screenshot.py`
+   - **Music** — update the songs directory path in `handlers/system.py`
 
+5. Run
 
-# How To Use
+        python main.py
 
-Once Jarvis is in its listening state, you can say what you want it to do by speaking.
+## Requirements
 
-## This AI can:
-
-- Tell you the current time and date
-- Tell you the current weather
-- Tell you your battery and cpu usage
-- Create a reminder list
-- Take screenshots
-- Send emails to your boss or family or your friend
-- Shut down or logout or hibernate your system
-- Tell you non-funny jokes :)
-- Open any website
-- Search Wikipedia for information
-- Change his/her voice from male to female and vice-versa
-
-And many more features to come...
-
-## Examples
-
-![image](https://user-images.githubusercontent.com/11313549/83199419-c312ac00-a15e-11ea-865c-54bfebae78bb.png)
+| Package | Version | Purpose |
+|---|---|---|
+| pyttsx3 | 2.90 | Text-to-speech engine |
+| SpeechRecognition | 3.15.1 | Microphone voice input |
+| wikipedia | 1.4.0 | Wikipedia search |
+| psutil | 5.9.5 | CPU and battery stats |
+| PyAutoGUI | 0.9.54 | Screenshots |
+| pyjokes | 0.6.0 | Random jokes |
+| requests | 2.32.4 | Weather API calls |
+| Pillow | 11.3.0 | Image handling for screenshots |
+| beautifulsoup4 | 4.14.3 | HTML parsing (wikipedia dep) |
+| comtypes | 1.4.16 | Windows COM interface (pyttsx3 dep) |
+| PyGetWindow | 0.0.9 | Window management (pyautogui dep) |
+| PyScreeze | 1.0.1 | Screen capture (pyautogui dep) |
+| pytweening | 1.2.0 | Mouse animation (pyautogui dep) |
+| pywin32 | 311 | Windows API (pyttsx3 dep) |
+| MouseInfo | 0.1.3 | Mouse info (pyautogui dep) |
+| PyMsgBox | 2.0.1 | Message boxes (pyautogui dep) |
+| PyRect | 0.2.0 | Rectangle geometry (pyautogui dep) |
+| pyperclip | 1.11.0 | Clipboard (pyautogui dep) |
 
 ## Commands
 
 ### Date & Time
-
 *What is the current time?*  
 *What is the current date?*
 
-
 ### About Jarvis
-
 *Who are you?*  
 *Tell me about yourself*  
 *Tell me about your developer*
 
-
-### Search Capabilities
-
+### Search
 *Check Wikipedia for Marvel*  
 *What is the infinity gauntlet?*  
 *Who is Iron Man?*  
 *Search on google for comic stores near me*  
 *Open the website youtube.com*
 
-
 ### Email
- 
 *Send email to my boss*
 
-
 ### System
-
 *What is the current CPU and battery?*  
 *Logout of my account*  
 *Restart my computer*  
 *Shut down my computer*
 
-
 ### Music
- 
 *Play songs*
 
-
-### Reminder List
-
+### Reminders
 *Create a reminder list*  
-*Reminder: buy eggs*
-
+*Reminder: buy eggs*  
+*Do you know anything?*
 
 ### Screenshot
- 
 *Take a screenshot*
 
-
 ### Jokes
-
 *Tell me a joke*
 
+### Weather
+*What is the weather?*  
+*Tell me the temperature*
 
-### Voice 
+### Voice
+*Change voice to female*  
+*Change voice to male*
 
-*Change voice to male voice*
-
-
-### Shutdown Jarvis
-
+### Exit
 *I am done*  
 *Bye bye Jarvis*
-
-
-# If you like it leave a Star 🌟 on this Repo
