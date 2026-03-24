@@ -8,5 +8,5 @@ def handle(query):
     print('CPU usage is at ' + usage)
     battery = psutil.sensors_battery()
     speak("Battery is at")
-    speak(battery.percent)
+    speak(str(battery.percent))
     print("battery is at:" + str(battery.percent))
