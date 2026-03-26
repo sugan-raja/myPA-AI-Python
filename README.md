@@ -127,4 +127,4 @@ myPA-AI-Python/
 
 ### Exit
 *I am done*  
-*Bye bye Jarvis*
+*Bye bye Taskmate*
