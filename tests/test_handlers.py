@@ -263,39 +263,67 @@ class TestJokes:
 # weather
 # =============================================================================
 class TestWeather:
-    def _mock_response(self, temp=300, pressure=1013, humidity=60, desc='clear sky'):
+    def setup_method(self):
+        pass
+
+    def _mock_geo_response(self, city='London', lat=51.5074, lon=-0.1278):
         return {
-            'cod': 200,
-            'main': {'temp': temp, 'pressure': pressure, 'humidity': humidity},
-            'weather': [{'description': desc}]
+            'results': [
+                {'name': city, 'latitude': lat, 'longitude': lon}
+            ]
+        }
+
+    def _mock_weather_response(self, temp=20, code=0):
+        return {
+            'current_weather': {
+                'temperature': temp,
+                'weathercode': code
+            }
         }
 
     def test_weather_found(self):
         with patch('handlers.weather.speak') as mock_speak, \
-             patch('handlers.weather.takeCommand', return_value='london'), \
+             patch('handlers.weather.takeCommand', return_value='London'), \
              patch('handlers.weather.requests') as mock_req:
-            mock_req.get.return_value.json.return_value = self._mock_response()
+            # First call: geocoding, Second call: weather
+            mock_req.get.side_effect = [
+                MagicMock(json=lambda: self._mock_geo_response(city='London', lat=51.5074, lon=-0.1278)),
+                MagicMock(json=lambda: self._mock_weather_response(temp=22, code=1))
+            ]
             from handlers import weather
             weather.handle('what is the weather')
-            assert any('london' in str(c).lower() for c in mock_speak.call_args_list)
+            assert any('London' in str(c) and '22' in str(c) and 'mainly clear' in str(c)
+                       for c in mock_speak.call_args_list)
 
     def test_weather_city_not_found(self):
         with patch('handlers.weather.speak') as mock_speak, \
              patch('handlers.weather.takeCommand', return_value='xyz123'), \
              patch('handlers.weather.requests') as mock_req:
-            mock_req.get.return_value.json.return_value = {'cod': '404'}
+            mock_req.get.return_value.json.return_value = {'results': []}
             from handlers import weather
             weather.handle('temperature')
-            assert any('Not Found' in str(c) for c in mock_speak.call_args_list)
+            assert any("couldn't find the weather" in str(c).lower() for c in mock_speak.call_args_list)
 
-    def test_temperature_conversion(self):
+    def test_weather_service_error(self):
         with patch('handlers.weather.speak') as mock_speak, \
-             patch('handlers.weather.takeCommand', return_value='paris'), \
-             patch('handlers.weather.requests') as mock_req:
-            mock_req.get.return_value.json.return_value = self._mock_response(temp=303.15)
+             patch('handlers.weather.takeCommand', return_value='Paris'), \
+             patch('handlers.weather.requests.get') as mock_get:
+            mock_get.side_effect = Exception('Network error')
             from handlers import weather
             weather.handle('temperature')
-            assert any('30' in str(c) for c in mock_speak.call_args_list)
+            assert any('trouble connecting' in str(c).lower() for c in mock_speak.call_args_list)
+
+    def test_weather_condition_unknown(self):
+        with patch('handlers.weather.speak') as mock_speak, \
+             patch('handlers.weather.takeCommand', return_value='Berlin'), \
+             patch('handlers.weather.requests') as mock_req:
+            mock_req.get.side_effect = [
+                MagicMock(json=lambda: self._mock_geo_response(city='Berlin', lat=52.52, lon=13.405)),
+                MagicMock(json=lambda: self._mock_weather_response(temp=15, code=123))  # unknown code
+            ]
+            from handlers import weather
+            weather.handle('weather')
+            assert any('unknown conditions' in str(c).lower() for c in mock_speak.call_args_list)
 
 
 # =============================================================================
