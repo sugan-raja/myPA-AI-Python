@@ -17,7 +17,7 @@ def _checktime(tt):
 
 
 def handle(query):
-    for word in ["jarvis", "hi", "hello"]:
+    for word in ["mypa", "hi", "hello"]:
         query = query.replace(word, "")
     if any(w in query for w in ["morning", "night", "goodnight", "afternoon", "noon"]):
         _checktime(query)

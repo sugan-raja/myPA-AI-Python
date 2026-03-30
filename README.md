@@ -1,3 +1,43 @@
+## Privacy and Local Inference
+
+All LLM queries are processed locally on your machine via Ollama. No user data or queries are sent to external servers, ensuring privacy and control over your data.
+
+## Model Weights and Data
+
+Model weights (such as Qwen 0.5B) are not included in this repository. You must download them using:
+
+```
+ollama pull qwen:0.5b
+```
+
+Refer to the [Ollama documentation](https://ollama.com/library/qwen) for more details.
+# Ollama + Qwen 0.5B Integration
+
+This project now supports local LLM-powered responses using [Ollama](https://ollama.com/) and the Qwen 0.5B model.
+
+## How to Enable Ollama Integration
+
+1. Install Ollama from https://ollama.com/download
+2. Pull the Qwen 0.5B model:
+        ```
+        ollama pull qwen:0.5b
+        ```
+3. Make sure Ollama is running (default: http://localhost:11434)
+4. Install Python dependencies:
+        ```
+        pip install -r requirements.txt
+        ```
+5. Run the assistant as usual. The model will be preloaded at startup for fast responses.
+
+## Usage
+
+- If your query is not handled by a specific handler, you can extend the code to use Ollama as a fallback for open-ended questions or creative tasks.
+
+## Example Ollama Query Function
+
+See `main.py` for the `ollama_query` function and warm-up logic.
+
+---
 # Taskmate AI
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=plastic&logo=python&logoColor=ffdd54)

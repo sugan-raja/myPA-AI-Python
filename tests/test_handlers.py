@@ -52,7 +52,7 @@ class TestPersonal:
             from handlers import personal
             personal.handle('who are you')
             mock_speak.assert_called()
-            assert any('Jarvis' in str(c) for c in mock_speak.call_args_list)
+            assert any('myPA' in str(c) for c in mock_speak.call_args_list)
 
     def test_developer_query_reads_file(self):
         import handlers.personal as personal_mod
@@ -351,7 +351,7 @@ class TestGreeting:
     def test_hello_no_time(self):
         with patch('handlers.greeting.speak') as mock_speak:
             from handlers import greeting
-            greeting.handle('hello jarvis')
+            greeting.handle('hello mypa')
             mock_speak.assert_called_with('what can i do for you')
 
     def test_good_morning(self):
@@ -359,7 +359,7 @@ class TestGreeting:
              patch('handlers.greeting.datetime') as mock_dt:
             mock_dt.datetime.now.return_value.hour = 9
             from handlers import greeting
-            greeting.handle('good morning jarvis')
+            greeting.handle('good morning mypa')
             assert any('morning' in str(c).lower() for c in mock_speak.call_args_list)
 
     def test_good_afternoon(self):
@@ -516,7 +516,7 @@ class TestDispatch:
         self.mocks['features'].assert_called_once()
 
     def test_routes_greeting(self):
-        self._dispatch('hello jarvis')
+        self._dispatch('hello mypa')
         self.mocks['greeting'].assert_called_once()
 
     def test_routes_voice(self):
@@ -524,7 +524,7 @@ class TestDispatch:
         self.mocks['voice'].assert_called_once()
 
     def test_routes_bye(self):
-        self._dispatch('bye bye jarvis')
+        self._dispatch('bye bye mypa')
         self.mocks['wishme_end'].assert_called_once()
 
     def test_routes_i_am_done(self):
