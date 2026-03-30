@@ -33,7 +33,7 @@ def _greet_by_hour(hour):
 def wishme():
     speak("Welcome Back")
     _greet_by_hour(datetime.datetime.now().hour)
-    speak("Jarvis at your service, Please tell me how can i help you?")
+    speak("myPA at your service, Please tell me how can I help you?")
 
 
 def wishme_end():

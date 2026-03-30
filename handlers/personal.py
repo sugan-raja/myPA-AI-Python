@@ -6,5 +6,5 @@ def handle(query):
         with open("about.txt", 'r') as res:
             speak("here is the details: " + res.read())
     else:
-        speak("I am Jarvis, version 1.0, I am an AI assistent, I am developed by Praveen on 29 may 2020 in INDIA")
+        speak("I am myPA, your AI assistant. I am here to help you with your tasks and questions.")
         speak("Now i hope you know me")
