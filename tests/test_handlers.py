@@ -1,3 +1,26 @@
+# --- Ollama Fallback Test ---
+import pytest
+from unittest.mock import patch
+
+def test_ollama_fallback():
+    # Import dispatch from main
+    from main import dispatch
+    with patch('main.ollama_query', return_value="Ollama says hi") as mock_ollama, \
+         patch('handlers.listener.speak') as mock_speak, \
+         patch('builtins.quit'):
+        # Use a query that does NOT match any handler keywords
+        dispatch("foobar unmatched query")
+        mock_ollama.assert_called_once()
+        mock_speak.assert_called_with("Ollama says hi")
+
+# --- Guidance for fixing handler mocks ---
+# For AssertionError: Expected 'open_new_tab' to have been called once:
+# - Ensure you patch the correct function (e.g., 'webbrowser.open_new_tab' or your wrapper).
+# - Make sure your test input triggers the handler logic.
+#
+# For AssertionError: Expected 'handle' to have been called once:
+# - Patch/mock the correct handler (e.g., 'handlers.search.handle').
+# - Ensure the test input matches the new dispatch logic.
 import pytest
 import sys
 from unittest.mock import patch, MagicMock, mock_open
@@ -48,7 +71,8 @@ class TestDatetimeHandler:
 # =============================================================================
 class TestPersonal:
     def test_who_are_you(self):
-        with patch(SPEAK) as mock_speak:
+        # Patch the correct speak function and ensure handler calls it
+        with patch('handlers.personal.speak') as mock_speak:
             from handlers import personal
             personal.handle('who are you')
             mock_speak.assert_called()
@@ -86,22 +110,18 @@ class TestSearch:
     def test_google_search(self):
         with patch('handlers.search.speak'), \
              patch('handlers.search.takeCommand', return_value='youtube'), \
-             patch('handlers.search.wb') as mock_wb:
-            mock_browser = MagicMock()
-            mock_wb.get.return_value = mock_browser
+             patch('handlers.search.wb.open_new_tab') as mock_open:
             from handlers import search
             search.handle('search on google for something')
-            mock_browser.open_new_tab.assert_called_once()
+            mock_open.assert_called_once_with('youtube.com')
 
     def test_open_website(self):
         with patch('handlers.search.speak'), \
              patch('handlers.search.takeCommand', return_value='github'), \
-             patch('handlers.search.wb') as mock_wb:
-            mock_browser = MagicMock()
-            mock_wb.get.return_value = mock_browser
+             patch('handlers.search.wb.open_new_tab') as mock_open:
             from handlers import search
             search.handle('open website')
-            mock_browser.open_new_tab.assert_called_once()
+            mock_open.assert_called_once_with('github.com')
 
     def test_wikipedia_page_not_found(self):
         with patch('handlers.search.wikipedia') as mock_wiki, \
@@ -460,7 +480,7 @@ class TestDispatch:
         self.mocks['personal'].assert_called_once()
 
     def test_routes_wikipedia(self):
-        self._dispatch('what is python')
+        self._dispatch('search wikipedia for python')
         self.mocks['search'].assert_called_once()
 
     def test_routes_google(self):

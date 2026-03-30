@@ -36,7 +36,7 @@ def wishme():
     speak("myPA at your service, Please tell me how can I help you?")
 
 
-def wishme_end():
+def wishme_end(*args, **kwargs):
     speak("signing off")
     hour = datetime.datetime.now().hour
     if hour >= 6 and hour < 12:
