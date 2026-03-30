@@ -1,4 +1,4 @@
-# Jarvis AI
+# Taskmate AI
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=plastic&logo=python&logoColor=ffdd54)
 
@@ -13,7 +13,7 @@ myPA-AI-Python/
 │   ├── voice.py             # TTS engine, speak(), voice_change()
 │   ├── listener.py          # Microphone input, wishme(), wishme_end()
 │   ├── datetime_handler.py  # Time and date
-│   ├── personal.py          # About Jarvis / developer info
+│   ├── personal.py          # About Taskmate / developer info
 │   ├── search.py            # Wikipedia + Google/website search
 │   ├── email_handler.py     # Send email via Gmail SMTP
 │   ├── system.py            # Shutdown / restart / logout / music
@@ -32,11 +32,11 @@ myPA-AI-Python/
 
 1. Clone the repository
 
-        git clone https://github.com/praveenkumarsrivas/Jarvis-AI-using-python3-.git
+        git clone https://github.com/sugan-raja/myPA-AI-Python.git
 
 2. Open the project directory
 
-        cd Jarvis-AI-using-python3-
+        cd myPA-AI-Python
 
 3. Install dependencies
 
@@ -82,7 +82,7 @@ myPA-AI-Python/
 *What is the current time?*  
 *What is the current date?*
 
-### About Jarvis
+### About Taskmate
 *Who are you?*  
 *Tell me about yourself*  
 *Tell me about your developer*
@@ -127,4 +127,4 @@ myPA-AI-Python/
 
 ### Exit
 *I am done*  
-*Bye bye Jarvis*
+*Bye bye Taskmate*
