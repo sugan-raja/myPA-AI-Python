@@ -81,6 +81,11 @@ mv piper/ ..
 cd ..
 rm -rf piper_amd64
 ```
+# Download and extract the Vosk speech recognition model (required for microphone input):
+```
+wget https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip
+unzip vosk-model-small-en-us-0.15.zip
+```
 
 ## Installation
 
