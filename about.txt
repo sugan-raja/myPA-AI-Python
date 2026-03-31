@@ -1,0 +1,29 @@
+myPA-AI-Python
+====================
+
+About:
+------
+myPA is a free and open-source personal AI assistant designed to help users with daily tasks, answer questions, and provide conversational support using local LLMs (Ollama) and custom Python handlers.
+
+Intent of Owner:
+----------------
+- To provide a privacy-friendly, extensible, and fully local AI assistant for everyone.
+- To encourage learning, experimentation, and community-driven improvements.
+- To make AI accessible and useful for personal productivity, learning, and fun.
+
+Authors & Contributors:
+-----------------------
+- Project Owners: Sugan Raja and Gopikrishnan
+- Original inspiration: Praveen Kumar Srivastava (see Credits.md)
+- Contributors: Add your name here by submitting a pull request!
+
+Micro Details for New Users:
+----------------------------
+- All AI responses are generated locally using Ollama (no cloud required).
+- Voice and text input/output are supported.
+- Handlers for jokes, reminders, weather, system info, and more are included.
+- You can add your own skills by creating new handler modules.
+- See README.md for setup and usage instructions.
+- For help or to contribute, see CONTRIBUTING.md.
+
+Welcome to myPA!

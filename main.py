@@ -23,12 +23,22 @@ import handlers.features as features
 import handlers.greeting as greeting
 import handlers.voice as voice
 
+
+import logging
 import requests
+# =========================
+# Logging Setup
+# =========================
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='[%(asctime)s] %(levelname)s: %(message)s',
+    datefmt='%H:%M:%S'
+)
 
 # =========================
 # Ollama Integration
 # =========================
-def ollama_query(prompt, model="qwen:0.5b"):
+def ollama_query(prompt, model="qwen2.5:0.5b"):
     """
     Send a prompt to Ollama and return the response.
     Args:
@@ -38,14 +48,34 @@ def ollama_query(prompt, model="qwen:0.5b"):
         str: The response from the Ollama model, or an error message.
     """
     url = "http://localhost:11434/api/generate"
-    payload = {"model": model, "prompt": prompt}
+    # Add instruction for brevity
+    concise_prompt = f"{prompt}\n\nPlease answer in 50 words or less."
+    payload = {
+        "model": model,
+        "prompt": concise_prompt,
+        "num_predict": 100  # ~50 words, adjust as needed
+    }
+    logging.debug(f"Sending prompt to Ollama: {prompt}")
     try:
-        response = requests.post(url, json=payload, timeout=30)
+        response = requests.post(url, json=payload, timeout=30, stream=True)
         if response.ok:
-            return response.json().get("response", "")
+            result = ""
+            import json
+            for line in response.iter_lines():
+                if line:
+                    try:
+                        data = json.loads(line.decode('utf-8'))
+                        if 'response' in data:
+                            result += data['response']
+                    except Exception as e:
+                        logging.error(f"Ollama JSON parse error: {e}")
+            logging.debug(f"Ollama response: {result}")
+            return result
         else:
+            logging.error(f"Ollama error: {response.status_code}")
             return f"[Ollama error: {response.status_code}]"
     except Exception as e:
+        logging.error(f"Ollama exception: {e}")
         return f"[Ollama exception: {e}]"
 
 # =========================
@@ -56,6 +86,7 @@ def dispatch(query):
     Routes the user's query to the appropriate handler.
     Uses a list of (condition, handler) pairs for clarity and maintainability.
     """
+    logging.info(f"Recognized speech/text: {query}")
     conditions = [
         (lambda q: 'time' in q or 'date' in q, datetime_handler.handle),
         (lambda q: any(w in q for w in ["tell me about yourself", "about you", "who are you", "yourself"]), personal.handle),
@@ -75,11 +106,25 @@ def dispatch(query):
     ]
     for condition, handler in conditions:
         if condition(query):
+            handler_name = getattr(handler, "__name__", repr(handler))
+            handler_module = getattr(handler, "__module__", "<unknown>")
+            logging.info(f"Dispatching to handler: {handler_module}.{handler_name}")
             handler(query)
             return
     # Fallback: Use Ollama for unmatched queries
+    logging.info("No handler matched. Using Ollama fallback.")
     response = ollama_query(query)
+    # Fallback truncation if model exceeds word limit
+    words = response.split()
+    if len(words) > 50:
+        response = ' '.join(words[:50]) + '...'
     print("Ollama:", response)
+    # Voice over the Ollama response
+    try:
+        from handlers.listener import speak
+        speak(response)
+    except Exception as e:
+        logging.error(f"Failed to voice Ollama response: {e}")
 
 # =========================
 # Main Program Loop
@@ -88,9 +133,10 @@ if __name__ == "__main__":
     wishme()
     # --- Preload Ollama model (warm-up) ---
     # This sends a dummy query to load the model into memory for faster responses.
-    print("Warming up Ollama model...")
-    _ = ollama_query("Hello", model="qwen:0.5b")
-    print("Ollama model ready.")
+    logging.info("Warming up Ollama model...")
+    _ = ollama_query("Hello", model="qwen2.5:0.5b")
+    logging.info("Ollama model ready.")
     while True:
+        logging.info("Listening for user input...")
         query = takeCommand().lower()
         dispatch(query)
