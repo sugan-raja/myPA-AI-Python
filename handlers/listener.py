@@ -1,22 +1,66 @@
-import speech_recognition as sr
+#import speech_recognition as sr
 import datetime
+import json
+import os
+import pyaudio
 from handlers.voice import speak
+from vosk import Model, KaldiRecognizer
 
+# 1. LOAD THE MODEL GLOBALLY (Do this at the top of your script!)
+print("Loading Vosk Model into memory...")
+model_path = "vosk-model-small-en-us-0.15"
 
+if not os.path.exists(model_path):
+    print(f"Error: Please download the model and place it at {model_path}")
+    exit(1)
+    
+model = Model(model_path)
+print("Model loaded successfully.")
 def takeCommand():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        print("Listening...")
-        r.pause_threshold = 0.5
-        audio = r.listen(source)
+    # Initialize the Recognizer
+    rec = KaldiRecognizer(model, 16000)
+    
+    p = pyaudio.PyAudio()
+    stream = p.open(format=pyaudio.paInt16, 
+                    channels=1, 
+                    rate=16000, 
+                    input=True, 
+                    frames_per_buffer=8000)
+    
+    stream.start_stream()
+    print("myPA: Listening... (Speak now)")
+    
     try:
-        print("Recognizing...")
-        query = r.recognize_google(audio, language='en-in')
+        # 3. Stream audio in real-time
+        while True:
+            # Read a small chunk of audio
+            data = stream.read(4000, exception_on_overflow=False)
+            
+            # AcceptWaveform returns True the moment it detects you stopped speaking
+            if rec.AcceptWaveform(data):
+                # Parse the JSON response
+                result = json.loads(rec.Result())
+                text = result.get("text", "")
+                
+                # If it actually heard words, return them
+                if text:
+                    print(f"You said: {text}")
+                    stream.stop_stream()
+                    stream.close()
+                    p.terminate()
+                    return text
+                else:
+                    # If it just heard a cough or background noise, keep listening
+                    print("Listening...")
+                    
     except Exception as e:
-        print(e)
-        speak("Say that again please...")
-        return "None"
-    return query
+        print(f"Microphone Error: {e}")
+        
+    # Cleanup if something goes wrong
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+    return "None"
 
 
 def _greet_by_hour(hour):
@@ -36,7 +80,7 @@ def wishme():
     speak("myPA at your service, Please tell me how can I help you?")
 
 
-def wishme_end():
+def wishme_end(*args, **kwargs):
     speak("signing off")
     hour = datetime.datetime.now().hour
     if hour >= 6 and hour < 12:
