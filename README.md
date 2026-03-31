@@ -4,23 +4,23 @@ All LLM queries are processed locally on your machine via Ollama. No user data o
 
 ## Model Weights and Data
 
-Model weights (such as Qwen 0.5B) are not included in this repository. You must download them using:
+Model weights (such as Qwen2.5 0.5B) are not included in this repository. You must download them using:
 
 ```
-ollama pull qwen:0.5b
+ollama pull qwen2.5:0.5b
 ```
 
 Refer to the [Ollama documentation](https://ollama.com/library/qwen) for more details.
-# Ollama + Qwen 0.5B Integration
+# Ollama + Qwen2.5 0.5B Integration
 
-This project now supports local LLM-powered responses using [Ollama](https://ollama.com/) and the Qwen 0.5B model.
+This project now supports local LLM-powered responses using [Ollama](https://ollama.com/) and the Qwen2.5 0.5B model.
 
 ## How to Enable Ollama Integration
 
 1. Install Ollama from https://ollama.com/download
-2. Pull the Qwen 0.5B model:
+2. Pull the Qwen2.5 0.5B model:
         ```
-        ollama pull qwen:0.5b
+        ollama pull qwen2.5:0.5b
         ```
 3. Make sure Ollama is running (default: http://localhost:11434)
 4. Install Python dependencies:
@@ -66,6 +66,20 @@ myPA-AI-Python/
 │   └── greeting.py          # Greetings and time-aware responses
 ├── requirements.txt
 └── about.txt                # Developer info (read by personal handler)
+```
+
+### Prerequisite for Linux Users: Download Piper Executable
+
+Download and extract the Piper TTS binary (required for voice features):
+
+```
+wget https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_amd64.tar.gz
+tar -xzf piper_amd64.tar.gz
+# Move the piper binary to the piper/ directory if needed
+cd piper_amd64
+mv piper/ ..
+cd ..
+rm -rf piper_amd64
 ```
 
 ## Installation
