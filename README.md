@@ -1,3 +1,4 @@
+### Demo video: https://youtu.be/ZWNo82r0ef4?si=isMqbKdzUXDz7PfQ
 ## Privacy and Local Inference
 
 All LLM queries are processed locally on your machine via Ollama. No user data or queries are sent to external servers, ensuring privacy and control over your data.
